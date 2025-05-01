@@ -1,6 +1,5 @@
-require("dotenv").config();
-const { Client, GatewayIntentBits } = require("discord.js");
-const express = require("express");
+import "dotenv/config";
+import { Client, GatewayIntentBits } from "discord.js";
 
 const client = new Client({
   intents: [
@@ -16,8 +15,9 @@ client.once("ready", () => {
 
 client.on("messageCreate", async (message) => {
   if (message.content === "!verify") {
-    // later: send QR or link to verify with zkPassport
-    message.reply("🔗 Verification coming soon via zkPassport!");
+    const userId = message.author.id;
+    const qrUrl = `http://localhost:3001/qr/${userId}`;
+    message.reply(`🔗 Scan this QR to verify with zkPassport:\n${qrUrl}`);
   }
 });
 

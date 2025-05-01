@@ -4,15 +4,20 @@
   "description": "![nukeCAPTCHA](https://github.com/user-attachments/assets/374e23d4-1bc6-43e6-ba55-b3df00697348)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"node index.js\" \"node verifyServer.js\""
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@zkpassport/sdk": "^0.3.3",
     "discord.js": "^14.19.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }
