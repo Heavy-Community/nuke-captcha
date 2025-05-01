@@ -1,3 +1,3 @@
 # nuke-captcha
 
-![nuke recaptcha diagram (1)](https://github.com/user-attachments/assets/87044c40-1ad3-41af-80ae-addd603f069a)
+![nukeCAPTCHA](https://github.com/user-attachments/assets/374e23d4-1bc6-43e6-ba55-b3df00697348)
