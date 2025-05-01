@@ -1,0 +1,18 @@
+{
+  "name": "nuke-captcha",
+  "version": "1.0.0",
+  "description": "![nukeCAPTCHA](https://github.com/user-attachments/assets/374e23d4-1bc6-43e6-ba55-b3df00697348)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.19.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "qrcode": "^1.5.4"
+  }
+}
