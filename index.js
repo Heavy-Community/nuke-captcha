@@ -49,4 +49,32 @@ client.on("messageCreate", async (message) => {
   }
 });
 
+// Check verification status periodically
+setInterval(async () => {
+  try {
+    const response = await fetch("http://localhost:3001/sessions");
+    const sessions = await response.json();
+
+    for (const [userId, session] of Object.entries(sessions)) {
+      if (session.verified && session.motionVerified) {
+        const guilds = client.guilds.cache;
+        for (const guild of guilds.values()) {
+          const member = await guild.members.fetch(userId).catch(() => null);
+          if (member) {
+            const role = guild.roles.cache.find(
+              (role) => role.name === "Verified"
+            );
+            if (role && !member.roles.cache.has(role.id)) {
+              await member.roles.add(role);
+              console.log(`✅ Assigned 'Verified' role to ${member.user.tag}`);
+            }
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error checking verification status:", error);
+  }
+}, 5000); // Check every 5 seconds
+
 client.login(process.env.DISCORD_TOKEN);
