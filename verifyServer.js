@@ -20,49 +20,97 @@ app.get("/qr/:userId", async (req, res) => {
   res.send(`
     <html>
       <head>
-        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <style>
           body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #f5f5f5;
+            background: #f6f8fa;
+            min-height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
-          .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          .card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 24px 28px 24px;
+            max-width: 370px;
+            width: 100%;
+            text-align: center;
           }
           .mock-passport {
-            width: 300px;
-            height: 200px;
+            width: 100%;
+            max-width: 320px;
+            height: 140px;
             background: linear-gradient(45deg, #1a237e, #0d47a1);
-            margin: 20px auto;
+            margin: 0 auto 18px auto;
             border-radius: 10px;
             color: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            padding: 18px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+          }
+          .mock-passport h3 {
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.01em;
+          }
+          .mock-passport p {
+            margin: 4px 0;
+            font-size: 0.98rem;
+            letter-spacing: 0.01em;
+          }
+          .title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 12px;
+            letter-spacing: 0.01em;
+          }
+          .desc {
+            color: #444;
+            margin-bottom: 18px;
+            font-size: 1rem;
+            letter-spacing: 0.01em;
           }
           .button {
-            background-color: #4CAF50;
+            background: linear-gradient(90deg, #4CAF50 60%, #43a047 100%);
             border: none;
             color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
+            padding: 14px 0;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
-            border-radius: 4px;
+            margin-top: 18px;
+            box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+            transition: background 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            letter-spacing: 0.01em;
+          }
+          .button:hover, .button:active {
+            background: linear-gradient(90deg, #43a047 60%, #388e3c 100%);
+            box-shadow: 0 4px 16px rgba(76,175,80,0.13);
           }
         </style>
       </head>
       <body>
-        <div class=\"container\">\n          <h2>zkPassport Verification</h2>\n          <div class=\"mock-passport\">\n            <h3>Digital Passport</h3>\n            <p>User ID: ${userId}</p>\n            <p>Status: Verified (mocked)</p>\n          </div>\n          <p>Congratulations! You have (mock) proved your humanness.</p>\n          <button class=\"button\" onclick=\"window.location.href='/motion-qr/${userId}'\">Continue to Motion Verification</button>\n        </div>\n      </body>\n    </html>\n  `);
+        <div class='card'>
+          <div class='title'>zkPassport Verification</div>
+          <div class='mock-passport'>
+            <h3>Digital Passport</h3>
+            <p>User ID: ${userId}</p>
+            <p>Status: Verified (mocked)</p>
+          </div>
+          <div class='desc'>Congratulations! You have (mock) proved your humanness.</div>
+          <button class='button' onclick="window.location.href='/motion-qr/${userId}'">Continue to Motion Verification</button>
+        </div>
+      </body>
+    </html>
+  `);
 });
 
 app.get("/motion-qr/:userId", async (req, res) => {
@@ -76,7 +124,7 @@ app.get("/motion-qr/:userId", async (req, res) => {
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
         <style>
           body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             text-align: center;
             padding: 20px;
             background-color: #f5f5f5;
@@ -117,7 +165,7 @@ app.get("/mock-verify/:userId", (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             text-align: center;
             padding: 20px;
           }
@@ -174,7 +222,7 @@ app.get("/motion/:userId", (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             text-align: center;
             padding: 20px;
           }
