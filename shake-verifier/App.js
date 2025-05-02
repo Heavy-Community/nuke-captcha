@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { Accelerometer } from "expo-sensors";
 import Svg, { Path, Circle } from "react-native-svg";
+import * as Linking from "expo-linking";
 
 export default function App() {
   const [recording, setRecording] = useState(false);
   const [motionData, setMotionData] = useState([]);
   const [patternDetected, setPatternDetected] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [linkError, setLinkError] = useState(null);
   const pathRef = useRef("");
 
   useEffect(() => {
@@ -21,6 +24,21 @@ export default function App() {
     }
     return () => subscription && subscription.remove();
   }, [recording]);
+
+  useEffect(() => {
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) {
+          try {
+            const parsed = Linking.parse(url);
+            setUserId(parsed.queryParams.userId);
+          } catch (e) {
+            setLinkError(e.message);
+          }
+        }
+      })
+      .catch((e) => setLinkError(e.message));
+  }, []);
 
   const analyzeMotion = () => {
     if (motionData.length < 10) return;
@@ -48,6 +66,10 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Draw an ∞ with your phone</Text>
+      {userId && <Text>User ID: {userId}</Text>}
+      {linkError && (
+        <Text style={{ color: "red" }}>Link error: {linkError}</Text>
+      )}
       <Svg height="100" width="200" style={styles.guide}>
         <Path
           d="M20,50 C20,10 80,10 80,50 C80,90 20,90 20,50 M80,50 C80,10 140,10 140,50 C140,90 80,90 80,50"
