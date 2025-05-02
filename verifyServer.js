@@ -1,6 +1,5 @@
 import express from "express";
 import QRCode from "qrcode";
-// import zkPassport from '@zkpassport/sdk'; ← We’ll add this later
 
 const app = express();
 const port = 3001;
@@ -8,30 +7,26 @@ const sessions = new Map();
 
 app.get("/qr/:userId", async (req, res) => {
   const userId = req.params.userId;
-  const sessionId = `${userId}-${Date.now()}`;
-  sessions.set(sessionId, { verified: false });
-
-  const proofUrl = `http://localhost:${port}/prove/${sessionId}`;
-  const qr = await QRCode.toDataURL(proofUrl);
-
+  const simulateUrl = `http://localhost:${port}/simulate/${userId}`;
+  const qr = await QRCode.toDataURL(simulateUrl);
   res.send(`
     <html>
-      <h2>Scan to verify with zkPassport</h2>
+      <h2>Simulated zkPassport Verification</h2>
       <img src="${qr}" />
+      <p>Scan or click <a href="${simulateUrl}">this link</a> to simulate verification.</p>
     </html>
   `);
 });
 
-app.get("/prove/:sessionId", async (req, res) => {
-  const sessionId = req.params.sessionId;
-  if (sessions.has(sessionId)) {
-    sessions.get(sessionId).verified = true;
-    res.send("✅ zkPassport proof submitted!");
-  } else {
-    res.status(404).send("❌ Invalid session.");
-  }
+app.get("/simulate/:userId", (req, res) => {
+  const userId = req.params.userId;
+  sessions.set(userId, { verified: true });
+  console.log(`✅ Simulated verification for user: ${userId}`);
+  res.json({ verified: true });
 });
 
 app.listen(port, () => {
-  console.log(`🌐 Verifier running at http://localhost:${port}`);
+  console.log(
+    `🌐 Simulated zkPassport verifier running at http://localhost:${port}`
+  );
 });
