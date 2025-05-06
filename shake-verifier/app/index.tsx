@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Button } from "react-native";
 import { Accelerometer } from "expo-sensors";
 import Svg, { Path, Circle } from "react-native-svg";
@@ -16,20 +16,7 @@ export default function HomeScreen() {
   const [patternDetected, setPatternDetected] = useState(false);
   const pathRef = useRef("");
 
-  useEffect(() => {
-    let subscription: { remove: () => void } | undefined;
-    if (recording) {
-      subscription = Accelerometer.addListener(({ x, y }) => {
-        setMotionData((current) => [...current, { x, y }]);
-      });
-      Accelerometer.setUpdateInterval(100);
-    } else if (subscription) {
-      subscription.remove();
-    }
-    return () => subscription?.remove();
-  }, [recording]);
-
-  const analyzeMotion = () => {
+  const analyzeMotion = useCallback(() => {
     if (motionData.length < 10) return;
 
     const leftMoves = motionData.filter((p) => p.x < -0.5).length;
@@ -40,16 +27,38 @@ export default function HomeScreen() {
     if (leftMoves > 5 && rightMoves > 5 && upMoves > 5 && downMoves > 5) {
       setPatternDetected(true);
     }
-  };
+  }, [motionData])
+  
+  useEffect(() => {
+    let subscription: { remove: () => void } | undefined;
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    if (recording) {
+      subscription = Accelerometer.addListener(({ x, y }) => {
+        setMotionData((current) => [...current, { x, y }]);
+      });
+      Accelerometer.setUpdateInterval(100);
+
+      timeoutId = setTimeout(() => {
+        setRecording(false);
+        analyzeMotion();
+      }, 5000);
+    } else if (subscription) {
+      subscription.remove();
+    }
+
+    return () => {
+      subscription?.remove();
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    }
+  }, [recording, analyzeMotion]);
 
   const handleStart = () => {
     setRecording(true);
     setPatternDetected(false);
     setMotionData([]);
-    setTimeout(() => {
-      setRecording(false);
-      analyzeMotion();
-    }, 5000);
   };
 
   return (
