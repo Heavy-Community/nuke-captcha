@@ -1,10 +1,12 @@
 # IamHuman
-
-![IamHuman](https://github.com/user-attachments/assets/374e23d4-1bc6-43e6-ba55-b3df00697348)
+![image](https://github.com/user-attachments/assets/a1e3b8ed-f2b9-4c5c-96a6-c7012773deb5)
 
 ## Overview
 
 IamHuman is a product that showcases a proof of concept (PoC) for identity verification using the ZKPassport SDK. It combines multiple verification methods, including unique human motion patterns (such as moving your mobile device in a figure-eight), fingerprint recognition, and facial ID. While the process may sound complex, in reality it takes less than 30 seconds—and even faster if you've already generated a unique identifier for the domain in which you're proving your humanness.
+
+## Technical Diagram
+![IamHuman](https://github.com/user-attachments/assets/374e23d4-1bc6-43e6-ba55-b3df00697348)
 
 ## Disclaimer
 
