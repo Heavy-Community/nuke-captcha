@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Button, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Button,
+  Text,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import { Accelerometer } from "expo-sensors";
 import Svg, { Path, Circle } from "react-native-svg";
 
@@ -12,6 +19,7 @@ export default function HomeScreen() {
   const [recording, setRecording] = useState(false);
   const [motionData, setMotionData] = useState<MotionData[]>([]);
   const [patternDetected, setPatternDetected] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const pathRef = useRef("");
 
   useEffect(() => {
@@ -80,6 +88,7 @@ export default function HomeScreen() {
       acceleration > 0.4
     ) {
       setPatternDetected(true);
+      setModalVisible(true);
     }
   };
 
@@ -110,22 +119,39 @@ export default function HomeScreen() {
     return "✨ Almost done — complete the ∞ motion!";
   };
 
-  // Convert current motion point to screen coordinate for visual feedback
-  const getCurrentPosition = () => {
-    if (!motionData.length) return { cx: 100, cy: 50 };
-    const last = motionData[motionData.length - 1];
-    const cx = 100 + last.x * 50;
-    const cy = 50 - last.y * 50;
-    return { cx, cy };
+  // Convert motion to infinity path-following visual space (more guided feel)
+  const getVisualPosition = () => {
+    if (!motionData.length) return { cx: 20, cy: 50 };
+    const { x, y } = motionData[motionData.length - 1];
+    const scaledX = 100 + x * 60; // re-center and stretch for visual feedback
+    const scaledY = 50 - y * 60;
+    return { cx: scaledX, cy: scaledY };
   };
 
-  const { cx, cy } = getCurrentPosition();
+  const { cx, cy } = getVisualPosition();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Draw an ∞ index(tabs) PROVERKA with your phone
-      </Text>
+      {/* Modal for success message */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Damn, you are 100% human!</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Text style={styles.title}>Draw an ∞ with your phone</Text>
       <Text style={styles.guidance}>{getGuidanceMessage()}</Text>
       <Svg height="100" width="200" style={styles.guide}>
         <Path
@@ -177,5 +203,40 @@ const styles = StyleSheet.create({
     color: "#555",
     marginBottom: 10,
     textAlign: "center",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 32,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#222",
+    textAlign: "center",
+  },
+  closeButton: {
+    backgroundColor: "#4CAF50",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
