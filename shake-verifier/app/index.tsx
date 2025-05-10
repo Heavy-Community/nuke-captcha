@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Button } from "react-native";
 import { Accelerometer } from "expo-sensors";
 import Svg, { Path, Circle } from "react-native-svg";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { Text } from "react-native";
 
 interface MotionData {
   x: number;
@@ -53,8 +52,8 @@ export default function HomeScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Draw an ∞ with your phone</ThemedText>
+    <View style={styles.container}>
+      <Text style={styles.title}>Drawwwww an ∞index with your phone</Text>
       <Svg height="100" width="200" style={styles.guide}>
         <Path
           d="M20,50 C20,10 80,10 80,50 C80,90 20,90 20,50 M80,50 C80,10 140,10 140,50 C140,90 80,90 80,50"
@@ -71,12 +70,10 @@ export default function HomeScreen() {
       />
       {patternDetected && (
         <View style={styles.result}>
-          <ThemedText style={styles.success}>
-            ✅ Infinity motion detected!
-          </ThemedText>
+          <Text style={styles.success}>✅ Infinity motion detected!</Text>
         </View>
       )}
-    </ThemedView>
+    </View>
   );
 }
 
