@@ -100,14 +100,26 @@ export default function HomeScreen() {
     const rightMoves = motionData.filter((p) => p.x > 0.4).length;
     const upMoves = motionData.filter((p) => p.y < -0.4).length;
     const downMoves = motionData.filter((p) => p.y > 0.4).length;
-    if (leftMoves < 3)
-      return `Step ${leftMoves + 1}: Move your phone to the LEFT`;
-    if (rightMoves < 3)
-      return `Step ${3 + rightMoves + 1}: Move your phone to the RIGHT`;
-    if (upMoves < 3) return `Step ${6 + upMoves + 1}: Move your phone UP`;
-    if (downMoves < 3) return `Step ${9 + downMoves + 1}: Move your phone DOWN`;
-    return "Great! Keep going to complete the ∞ shape.";
+
+    if (leftMoves <= rightMoves && leftMoves < 3)
+      return "↩️ Move your phone LEFT";
+    if (rightMoves <= upMoves && rightMoves < 3) return "↪️ Now move RIGHT";
+    if (upMoves <= downMoves && upMoves < 3) return "⬆️ Now move UP";
+    if (downMoves < 3) return "⬇️ Now move DOWN to complete the loop";
+
+    return "✨ Almost done — complete the ∞ motion!";
   };
+
+  // Convert current motion point to screen coordinate for visual feedback
+  const getCurrentPosition = () => {
+    if (!motionData.length) return { cx: 100, cy: 50 };
+    const last = motionData[motionData.length - 1];
+    const cx = 100 + last.x * 50;
+    const cy = 50 - last.y * 50;
+    return { cx, cy };
+  };
+
+  const { cx, cy } = getCurrentPosition();
 
   return (
     <View style={styles.container}>
@@ -122,7 +134,7 @@ export default function HomeScreen() {
           strokeWidth="2"
           fill="none"
         />
-        <Circle cx="20" cy="50" r="4" fill="green" />
+        <Circle cx={cx} cy={cy} r="4" fill="red" />
       </Svg>
       <Button
         title={recording ? "Recording..." : "Start Motion"}
